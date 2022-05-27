@@ -5,18 +5,18 @@
 <!-- list section start -->
 <div class="card">
 
-    <table class="table table-striped table_hover w-100" id="contract_datatable">
+    <table class="table table-striped w-100 table_hover" id="contract_datatable">
             <thead class="table-light">
-            <tr>
-                <th>№</th>
-                <th></th>
-                <th>Number</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>User</th>
-                <th>Jurist</th>
-                <th class="text-right">Actions</th>
-            </tr>
+                <tr>
+                    <th>№</th>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Jurist</th>
+                    <th class="text-right">Actions</th>
+                </tr>
             </thead>
             <tbody>
 
@@ -28,11 +28,11 @@
                     <td>{{ $c->number }}</td>
                     <td>
                         @if($c->status == 0)
-                            <span class="badge badge-warning">sent for verification</span>
+                            <span class="badge badge-warning p-1" style="font-size: 12px;">sent for verification</span>
                         @elseif($c->status == -1)
-                            <sapn class="badge badge-danger">Unapproved</sapn>
+                            <sapn class="badge badge-danger p-1" style="font-size: 12px;">Unapproved</sapn>
                         @elseif($c->status == 1)
-                            <sapn class="badge badge-success">Approved</sapn>
+                            <sapn class="badge badge-success p-1" style="font-size: 12px;">Approved</sapn>
                         @endif
                     </td>
                     <td>{{ date('d.m.Y H:i', strtotime($c->created_at)) }}</td>
@@ -67,7 +67,7 @@
                             @else
                                 <a class="text-secondary" href="javascript:void(0);"
                                    title="Cannot be turned off">
-                                    <i class="fas fa-trash mr-50"></i>
+                                    <i class="fas fa-trash-alt mr-50"></i>
                                 </a>
                             @endif
 
@@ -99,7 +99,6 @@
             $.each(action_input, function(i, item) {
                 $(item).prop('checked', false)
             });
-
         }
 
         $(document).ready(function() {
@@ -116,27 +115,6 @@
                 language: {
                     search: "",
                     searchPlaceholder: " Search...",
-                },
-                "columnDefs": [
-                    { "visible": false, "targets": 1 }
-                ],
-                "order": [[ 1, 'asc' ]],
-                "drawCallback": function( settings ) {
-                    let api = this.api();
-                    let rows = api.rows( {page:'current'} ).nodes();
-                    let last = null;
-                    api.column(1, { page: 'current' } ).data().each( function ( group, i ) {
-                        if ( last !== group ) {
-                            if(group) {
-                                $(rows).eq( i ).before(
-                                    '<tr class="js_this_group" style="background: white">' +
-                                    '<td colspan="9" class="text-center"><b>'+group+'</b></td>' +
-                                    '</tr>'
-                                );
-                            }
-                            last = group;
-                        }
-                    });
                 }
             });
 
@@ -202,7 +180,7 @@
                 }
             })
 
-            /** User add **/
+            /** Contract add **/
             $('.js_user_add_from').on('submit', function(e) {
                 e.preventDefault()
                 let form = $(this)
@@ -220,12 +198,6 @@
                     success: (response) => {
 
                         if(response.status) {
-                            Swal.fire({
-                                title: 'Success',
-                                icon: 'success',
-                                customClass: {confirmButton: 'd-none'},
-                                buttonsStyling: false
-                            });
                             location.reload()
                         }
                         console.log(response)

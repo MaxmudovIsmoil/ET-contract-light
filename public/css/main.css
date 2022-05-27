@@ -39,7 +39,8 @@
     padding-left: 10px !important;
 }
 
-#datatable_paginate, #contract_datatable_paginate {
+#datatable_paginate, #contract_datatable_paginate,
+#user_paginate, #user_datatable_paginate {
     padding-right: 10px !important;
     margin-bottom: 5px !important;
 }

@@ -19,7 +19,13 @@ class UsersController extends Controller
         $user = Auth::user();
         $user->load('section');
 
-        $permission = explode(';', $user->section->permission);
+        if ($user->section->rule == "ROOT" || $user->section->rule == "ADMIN_USER") {
+
+            $permission = explode(';', $user->section->permission);
+            unset($permission[0]);
+
+        }
+
         return $permission;
     }
 

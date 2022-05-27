@@ -4,19 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Contract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ContractController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    static private function getContracts()
     {
-        $contracts = Contract::where('deleted_at', NUll)->orderBy('created_at', 'DESC')->get();
+        $user = Auth::user();
+        $user->load('section');
+
+        if ($user->section->rule != 'USER') {
+            $permission = explode(';', $user->section->permission);
+            $contracts = Contract::whereIn('user_id', $permission)
+                ->where('deleted_at', NUll)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        }
+        else {
+            $contracts = Contract::where(['user_id' => $user->id, 'deleted_at' => NUll])
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        }
         $contracts->load('user', 'jurist');
 
+        return $contracts;
+    }
+
+
+    public function index()
+    {
+        $contracts = self::getContracts();
 
         return view('contract.index', compact('contracts'));
     }

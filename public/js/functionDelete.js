@@ -1,46 +1,72 @@
+$(document).ready(function(){
+
+    var deleteModal = $(document).find('#deleteModal')
+
+    $(document).on("click", ".js_delete_btn", function () {
+
+        let name = $(this).data('name')
+        let url = $(this).data('url')
+
+        deleteModal.find('.modal-title').html(name)
+
+        let form = deleteModal.find('#js_modal_delete_form')
+        form.attr('action', url)
+        deleteModal.modal('show');
+
+    });
+
+    /* delete form submit */
+    $(document).on('submit', '#js_modal_delete_form', function (e) {
+        e.preventDefault()
+
+        let url = $(this).attr('action')
+        let this_tr = $(document).find('.js_this_tr')
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $(this).serialize(),
+            success: (response) => {
+
+                if(!response.status) {
+                    deleteModal.find('.js_message').addClass('d-none')
+                    deleteModal.find('.js_danger').html(response.errors)
+                }
+
+                if(response.status) {
+                    this_tr.each(function (item, arr) {
+                        if($(arr).data('id') == response.id) {
+                            let prev = $(arr).prev()
+                            let next = $(arr).next()
+                            if ((prev.hasClass('js_this_group') && next.hasClass('js_this_group')) || (prev.hasClass('js_this_group') && next.length === 0)) {
+                                prev.remove()
+                                arr.remove()
+                            } else {
+                                arr.remove()
+                            }
+                        }
+                    })
+                    deleteModal.modal('hide')
+                }
+            },
+            error: (response) => {
+                console.log('error:', response);
+            }
+        });
+
+    });
 
 
-$(document).on("click", ".js_delete_btn", function () {
+    $('#deleteModal button[data-dismiss="modal"]').click(function() {
 
-    let name = $(this).data('name')
-    let url = $(this).data('url')
+        deleteModal.find('.js_message').removeClass('d-none')
+        deleteModal.find('.js_danger').html('')
 
+    })
 
-    let title = $(document).find('#delete-model-title')
-    let modalForm = $(document).find('#js_modal_delete_form')
-
-    title.text(name);
-    modalForm.attr('action', url)
 
 });
 
 
-let delete_form = $(document).find('#js_modal_delete_form')
-delete_form.on('submit', function (e) {
-    e.preventDefault()
 
-    let url = $(this).attr('action')
-    let this_tr = $(document).find('.js_this_tr')
-
-    $.ajax({
-        type:"POST",
-        url: url,
-        data: $(this).serialize(),
-        success: (response) => {
-
-            console.log(response);
-
-            this_tr.each(function (item, arr) {
-                if($(arr).data('id') == response.id)
-                    arr.remove()
-            })
-
-            $(this).closest('#delete_notify').modal('hide')
-        },
-        error: (response) => {
-            console.log(response);
-        }
-    });
-
-})
 /** ================================================================================== **/

@@ -2,90 +2,80 @@
 
 @section('content')
 
-        <div class="content-wrapper">
-            <div class="content-body">
-                <div class="form-modal-ex position-relative">
-                    <!-- Button trigger modal -->
-                    <a href="javascript:void(0);" data-url="{{ route('user.store') }}"
-                       class="btn btn-outline-primary add-user-btn js_add_btn">Add</a>
-                    <h3 class="text-center text-info position-absolute zindex-1" style="left: 45%; top: 12px;">Users</h3>
-                    <!-- Modal -->
-                </div>
+    <div class="form-modal-ex position-relative">
+        <!-- Button trigger modal -->
+        <a href="javascript:void(0);" data-url="{{ route('user.store') }}"
+           class="btn btn-outline-primary add-user-btn js_add_btn">
+            <i class="fas fa-user-plus"></i></a>
+        <h3 class="text-center text-primary position-absolute" style="z-index: 1; left: 45%; top: 12px;">Users</h3>
+        <!-- Modal -->
+    </div>
 
-                <!-- users list start -->
-                <section class="app-user-list">
-                    <!-- list section start -->
-                    <div class="card">
-                        <div class="card-datatable table-responsive pt-0">
-                            <table class="table table-striped" id="user_datatable">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Section</th>
-                                        <th>Full Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Status</th>
-                                        <th>date</th>
-                                        <th>rule</th>
-                                        <th class="text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+    <!-- list section start -->
+    <div class="card">
+        <table class="table table-striped w-100 table_hover" id="user_datatable">
+                <thead class="table-light">
+                    <tr>
+                        <th>№</th>
+                        <th>Section</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>date</th>
+                        <th>rule</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                                @foreach($users as $u)
+                @foreach($users as $u)
 
-                                    <tr class="js_this_tr" data-id="{{ $u->id }}">
-                                        <td>{{ 1 + $loop->index }}</td>
-                                        <td>{{ $u->section->name }}</td>
-                                        <td>{{ $u->full_name }}</td>
-                                        <td>{{ $u->email }}</td>
-                                        <td>{{ \Helper::phoneFormat($u->phone) }}</td>
-                                        <td>@if($u->status) active @else no active @endif</td>
-                                        <td>{{ date('d.m.Y H:i', strtotime($u->created_at)) }}</td>
-                                        <td>
-                                            @if(optional($u->section)->rule == 'ADMIN_USER')
-                                                admin & user
-                                            @elseif(optional($u->section)->rule == 'ADMIN')
-                                                admin
-                                            @elseif(optional($u->section)->rule == 'USER')
-                                                user
-                                            @endif
-                                        </td>
-                                        <td class="text-right">
-                                            <div class="d-flex justify-content-around">
-                                                <a href="javascript:void(0);" class="text-primary js_edit_btn"
-                                                   data-one_user_url="{{ route('user.oneUser', [$u->id]) }}"
-                                                   data-update_url="{{ route('user.update', [$u->id]) }}"
-                                                   title="Edit">
-                                                    <i class="fas fa-pen mr-50"></i>
-                                                </a>
-                                                <a class="text-danger js_delete_btn" href="javascript:void(0);"
-                                                   data-toggle="modal"
-                                                   data-target="#deleteModal"
-                                                   data-name="{{ $u->full_name }}"
-                                                   data-url="{{ route('user.destroy', [$u->id]) }}" title="Delete">
-                                                    <i class="far fa-trash-alt mr-50"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                    <tr class="js_this_tr" data-id="{{ $u->id }}">
+                        <td>{{ 1 + $loop->index }}</td>
+                        <td>{{ $u->section->name }}</td>
+                        <td>{{ $u->full_name }}</td>
+                        <td>{{ $u->email }}</td>
+                        <td>{{ \Helper::phoneFormat($u->phone) }}</td>
+                        <td>@if($u->status) active @else no active @endif</td>
+                        <td>{{ date('d.m.Y H:i', strtotime($u->created_at)) }}</td>
+                        <td>
+                            @if(optional($u->section)->rule == 'ADMIN_USER')
+                                admin & user
+                            @elseif(optional($u->section)->rule == 'JURIST')
+                                jurist
+                            @elseif(optional($u->section)->rule == 'USER')
+                                user
+                            @endif
+                        </td>
+                        <td class="text-right">
+                            <div class="d-flex justify-content-around">
+                                <a href="javascript:void(0);" class="text-primary js_edit_btn"
+                                   data-one_user_url="{{ route('user.oneUser', [$u->id]) }}"
+                                   data-update_url="{{ route('user.update', [$u->id]) }}"
+                                   title="Edit">
+                                    <i class="fas fa-pen mr-50"></i>
+                                </a>
+                                <a class="text-danger js_delete_btn" href="javascript:void(0);"
+                                   data-toggle="modal"
+                                   data-target="#deleteModal"
+                                   data-name="{{ $u->full_name }}"
+                                   data-url="{{ route('user.destroy', [$u->id]) }}" title="Delete">
+                                    <i class="far fa-trash-alt mr-50"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
 
-                                @endforeach
+                @endforeach
 
-                                </tbody>
-                            </table>
-                        </div>
+                </tbody>
+            </table>
+    </div>
+    <!-- list section end -->
 
-                    </div>
-                    <!-- list section end -->
-                </section>
-                <!-- users list ends -->
 
-            </div>
-        </div>
-
-        @include('users.add_edit_user_modal')
+    @include('users.add_edit_user_modal')
 
 @endsection
 
@@ -132,7 +122,7 @@
                         if ( last !== group ) {
                             if(group) {
                                 $(rows).eq( i ).before(
-                                    '<tr class="js_this_group" style="background: #19223a">' +
+                                    '<tr class="js_this_group" style="background: white;">' +
                                     '<td colspan="9" class="text-center"><b>'+group+'</b></td>' +
                                     '</tr>'
                                 );
@@ -149,6 +139,7 @@
 
                 form.attr('action', url)
                 user_form_clear(form)
+                modal.find('.modal-title').html('Add User')
                 modal.modal('show')
             })
 
@@ -188,6 +179,7 @@
                                 }
                             })
                         }
+                        modal.find('.modal-title').html('Edit User')
                         modal.modal('show')
                     },
                     error: (response) => {
@@ -205,7 +197,7 @@
                 }
             })
 
-            /** User add **/
+            /** User submit store or update **/
             $('.js_user_add_from').on('submit', function(e) {
                e.preventDefault()
                 let form = $(this)
@@ -223,12 +215,6 @@
                     success: (response) => {
 
                         if(response.status) {
-                            Swal.fire({
-                                title: 'Success',
-                                icon: 'success',
-                                customClass: {confirmButton: 'd-none'},
-                                buttonsStyling: false
-                            });
                             location.reload()
                         }
                         console.log(response)

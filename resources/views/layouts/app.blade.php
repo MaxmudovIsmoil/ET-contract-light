@@ -65,21 +65,31 @@
                 </li>
 
                 <li class="c-header-nav-item">
-                    <a class="c-header-nav-link" href="{{ route('contract.index') }}" style="color: black;">
+                    <a class="c-header-nav-link @if(Request::segment(1) == 'contract') active @endif" href="{{ route('contract.index') }}" style="color: black; height: 35px;">
                         <i class="far fa-file-alt mr-2"></i> <span>Contracts</span>
                     </a>
                 </li>
             </ul>
 
             <ul class="c-header-nav ml-auto mr-4">
-                <li class="c-header-nav-item mx-md-5 mx-2">
-                    <a class="c-header-nav-link active" href="#">
-                        <svg class="c-icon">
-                            <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-pencil')  }}"></use>
-                        </svg>
-                        <div class="c-avatar">edit</div>
-                    </a>
-                </li>
+                @php
+                    $user = \Auth::user();
+                    $user->load('section');
+                @endphp
+
+                @if(Request::segment(1) == 'template1' || Request::segment(1) == 'template2' || Request::segment(1) == 'template3' ||
+                Request::segment(1) == 'template4' || Request::segment(1) == 'template5')
+
+                    <li class="c-header-nav-item mx-md-5 mx-2">
+                        <a class="c-header-nav-link active" href="#">
+                            <svg class="c-icon">
+                                <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-pencil')  }}"></use>
+                            </svg>
+                            <div class="c-avatar">edit</div>
+                        </a>
+                    </li>
+
+                @endif
 
                 <li class="c-header-nav-item dropdown">
                     <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -90,12 +100,22 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0 pb-0">
 
-                        <a class="dropdown-item" href="#">
+                        @if($user->section->rule == 'ROOT' || $user->section->rule == 'ADMIN_USER')
+                            <a class="dropdown-item @if(Request::segment(1) == 'user') active @endif" href="{{ route('user.index') }}">
+                                <svg class="c-icon mr-2">
+                                    <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-user') }}"></use>
+                                </svg>
+                                Users
+                            </a>
+                        @endif
+
+                        <a class="dropdown-item @if(Request::segment(1) == 'user-profile-show') active @endif" href="{{ route('user.user_profile_show') }}">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-settings') }}"></use>
                             </svg>
-                            Password update
+                            Settings
                         </a>
+
                         <a href="{{ route('logout') }}" class="dropdown-item"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <svg class="c-icon mr-2">
@@ -132,9 +152,7 @@
 <script src="{{ asset('/js/svgxuse.min.js') }}"></script>
 <!--<![endif]-->
 
-<script src="{{ asset('/js/coreui-chartjs.bundle.js') }}"></script>
 <script src="{{ asset('/js/coreui-utils.js') }}"></script>
-<script src="{{ asset('/js/main.js') }}"></script>
 <script src="{{ asset('/js/datatable.js') }}"></script>
 
 {{-- number format --}}

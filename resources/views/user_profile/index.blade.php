@@ -5,7 +5,7 @@
      <div class="content-wrapper">
         <div class="content-body">
             <div class="card offset-3 col-md-6">
-                <h3 class="text-center text-info mt-2 mb-1">User information settings</h3>
+                <h3 class="text-center text-info mt-2 mb-1">User edit</h3>
                 <form action="{{ route('user.user_profile_update', [$user->id]) }}" id="js_user_profile_update_from" method="POST">
                     <div class="row mb-1">
                         @csrf
@@ -34,8 +34,8 @@
                             <div class="invalid-feedback">The password field is required.</div>
                         </div>
 
-                        <div class="col-md-12 mt-1">
-                            <button type="submit" class="btn btn-outline-primary btn-block" name="saveBtn">Save</button>
+                        <div class="col-md-12 mt-1 mb-3">
+                            <button type="submit" class="btn btn-primary btn-block" name="saveBtn">Save</button>
                         </div>
                     </div>
                 </form>
@@ -70,12 +70,7 @@
                     success: (response) => {
 
                         if(response.status) {
-                            Swal.fire({
-                                title: 'Success',
-                                icon: 'success',
-                                customClass: {confirmButton: 'd-none'},
-                                buttonsStyling: false
-                            });
+                            window.location.href = window.location.protocol + "//" + window.location.host + "/contract/";
                             // location.reload()
                         }
                         console.log(response)
