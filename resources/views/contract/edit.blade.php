@@ -8,8 +8,8 @@
 
 @section('content')
 
-    <section class="app-user-list">
-        <a href="{{ route('contract.index') }}" class="back-btn-icon" title="go back"><i class="fas fa-long-arrow-alt-left"></i></a>
+    <a href="{{ route('contract.index') }}" class="back-btn-icon" title="go back"><i class="fas fa-long-arrow-alt-left"></i></a>
+    <section class="app-user-list js_data_all">
 
         @php echo $contract->data; @endphp
 
@@ -142,20 +142,21 @@
                 e.preventDefault();
 
                 let token = $('meta[name="csrf-token"]').attr('content');
-                let data = ''
-                let text_edit = $('.text_edit')
-                $.each(text_edit, function(item, index) {
+                let number = $('.js_number').html()
+                let data = $('.js_data_all').html()
 
-                    data += $(index).html()+";; ";
-                })
+
+                console.log('number: ', number)
+                console.log('data: ', data)
 
                 $.ajax({
-                    url: '{{ route('templates.store') }}',
+                    url: '{{ route('contract.update', [$contract->id]) }}',
                     type: 'POST',
-                    data: { '_token': token, 'data': data },
+                    data: { '_token': token, 'number': number, 'data': data, '_method': 'PUT' },
                     dataType: 'JSON',
                     success: (response) => {
-                        console.log('res: ', response)
+                        // console.log('res: ', response)
+                        window.location.href = window.location.protocol + "//" + window.location.host + "/contract/";
                     },
                     error: (response) => {
                         console.log('error: ', response)

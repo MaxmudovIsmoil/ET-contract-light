@@ -41,6 +41,10 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     /******************** Contract ***********************/
     Route::group(['prefix' => '/'], function() {
         Route::resource('/contract', ContractController::class)->except(['create', 'store']);
+        Route::get('/contract/get-contracts/', [ContractController::class, 'getContracts'])->name('contract.getContracts');
+//        Route::get('/contract/one-contract/{id}', [ContractController::class, 'oneContract'])->name('contract.oneContract');
+
+        Route::post('/contract/update_status/', [ContractController::class, 'update_status'])->name('contract.update_status');
     });
     /******************** ./Contract *********************/
 

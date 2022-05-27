@@ -339,11 +339,11 @@
                                 (нужное подчеркнуть)
                             </td>
                             <td>
-                                <div class="js_list3_tr4_p_div">
-                                    <p style="margin-bottom: 0; color: red;">широкополосный</p>
-                                    <p style="margin-bottom: 0; color: red;">другое</p>
+                                <div class="js_list3_tr4_p_div11">
+                                    <span class="text_edit" contenteditable="false">широкополосный</span> <br>
+                                    <span class="text_edit" contenteditable="false">другое</span>
                                 </div>
-                                <div class="js_list3_tr4_radio_div d-none">
+                                <div class="js_list3_tr4_radio_div11 d-none">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="tr4_name1" value="широкополосный" id="tr4_name1">
                                         <label class="form-check-label text-danger h5" for="tr4_name1">широкополосный</label>
@@ -384,15 +384,18 @@
                                 (нужное подчеркнуть)
                             </td>
                             <td>
-                                предоставлены Абонентом <br>
-                                <b>предоставлены СП ООО «Ist Telekom»</b> <br>
-                                <span class="text-underline">другое:</span>
-
-                                <select class="js-table-select2-multiple" name="states[]" multiple="multiple" style="background: lightblue">
-                                    <option>предоставлены Абонентом</option>
-                                    <option><b>предоставлены СП ООО «Ist Telekom»</b></option>
-                                    <option>другое:</option>
-                                </select>
+                                <div class="js_list3_tr4_select2_text11">
+                                    <p class="mb-0"><span class="text_edit" contenteditable="false">предоставлены Абонентом</span></p>
+                                    <p class="mb-0"><span class="text_edit" contenteditable="false"><b>предоставлены СП ООО «Ist Telekom»</b></span></p>
+                                    <p><span class="text-underline text_edit" contenteditable="false">другое:</span></p>
+                                </div>
+{{--                                <div class="js_list3_tr4_select2_div d-none">--}}
+{{--                                    <select class="js_list3_tr4_select2_select" style="width: 70%;" name="multi2[]" multiple="multiple">--}}
+{{--                                        <option>предоставлены Абонентом</option>--}}
+{{--                                        <option><b>предоставлены СП ООО «Ist Telekom»</b></option>--}}
+{{--                                        <option><span class="text-underline">другое:</span></option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
                             </td>
                         </tr>
                         <tr class="tr-empty">
@@ -739,7 +742,6 @@
             <i class="i-number">5</i>
         </div><!--./card -->
 
-
     </section>
 
 @endsection
@@ -769,36 +771,37 @@
 
 
             $(document).ready(function() {
-                $('.js-table-select2-multiple').select2();
+                $('.js_list3_tr4_select2_select').select2();
             });
 
 
             $(document).on('click', '.js_text_save_btn', function (e) {
                 e.preventDefault();
 
-                let name1 = $('.js_list3_tr4_radio_div input[name="tr4_name1"]')
+                //
+                let js_list3_tr4_select2_text = $('.js_list3_tr4_select2_text')
+                let js_list3_tr4_select2_div = $('.js_list3_tr4_select2_select')
 
-                console.log('n: ', name1)
-                console.log('val: ', name1.val())
+                //
 
                 let token = $('meta[name="csrf-token"]').attr('content');
                 let number = $('.js_number').html()
-                let title = $('.js_title').html()
+                let title = 'ДОГОВОР ЮР. ЛИЦА';
                 let data = $('.js_data_all').html()
 
-                {{--$.ajax({--}}
-                {{--    url: '{{ route('templates.store') }}',--}}
-                {{--    type: 'POST',--}}
-                {{--    data: { '_token': token, 'number': number, 'title': title, 'data': data },--}}
-                {{--    dataType: 'JSON',--}}
-                {{--    success: (response) => {--}}
-                {{--        console.log('res: ', response)--}}
-                {{--        // window.location.href = window.location.protocol + "//" + window.location.host + "/contract/";--}}
-                {{--    },--}}
-                {{--    error: (response) => {--}}
-                {{--        console.log('error: ', response)--}}
-                {{--    }--}}
-                {{--})--}}
+                $.ajax({
+                    url: '{{ route('templates.store') }}',
+                    type: 'POST',
+                    data: { '_token': token, 'number': number, 'title': title, 'data': data },
+                    dataType: 'JSON',
+                    success: (response) => {
+                        console.log('res: ', response)
+                        window.location.href = window.location.protocol + "//" + window.location.host + "/contract/";
+                    },
+                    error: (response) => {
+                        console.log('error: ', response)
+                    }
+                })
             });
 
         });

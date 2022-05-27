@@ -172,7 +172,7 @@
 
                 let token = $('meta[name="csrf-token"]').attr('content');
                 let number = $('.js_number').html()
-                let title = $('.js_title').html()
+                let title = 'ДОГОВОР НА Уступки';
                 let data = $('.js_data_all').html()
 
                 $.ajax({

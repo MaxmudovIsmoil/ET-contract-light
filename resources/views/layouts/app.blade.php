@@ -6,11 +6,14 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Contract</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="icon" href="{{ asset('/images/etclogo.png') }}" type="image/icon">
 
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/icons-css/all.css') }}">
     <link rel="stylesheet" href="{{ asset('/fontawesome-free-6.1/css/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('/select2/css/select2.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('/css/form-validation.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/datatable.css') }}">
@@ -46,19 +49,22 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template1') active @endif" href="{{ route('template1') }}">Contract 1 (ДОГОВОР ЮР. ЛИЦА)</a>
+{{--                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template1') active @endif" href="{{ route('template1') }}">Contract 1 (ДОГОВОР ЮР. ЛИЦА)</a>--}}
+                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template1') active @endif" href="{{ route('template1') }}">ДОГОВОР ЮР. ЛИЦА</a>
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template2') active @endif" href="{{ route('template2')  }}">Contract 2 (ДОГОВОР ПОДРЯДА)</a>
+{{--                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template2') active @endif" href="{{ route('template2')  }}">Contract 2 (ДОГОВОР ПОДРЯДА)</a>--}}
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template3') active @endif" href="{{ route('template3') }}">Contract 3 (ДОГОВОР НА Уступки)</a>
+{{--                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template3') active @endif" href="{{ route('template3') }}">Contract 3 (ДОГОВОР НА Уступки)</a>--}}
+                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template3') active @endif" href="{{ route('template3') }}">ДОГОВОР НА Уступки</a>
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template4') active @endif" href="{{ route('template4')  }}">Contract 4 (ДОГОВОР НА АРЕНДУ)</a>
+{{--                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template4') active @endif" href="{{ route('template4')  }}">Contract 4 (ДОГОВОР НА АРЕНДУ)</a>--}}
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template5') active @endif" href="{{ route('template5') }}">Contract 5 (ДОГОВОР БЮДЖЕТ)</a>
+{{--                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template5') active @endif" href="{{ route('template5') }}">Contract 5 (ДОГОВОР БЮДЖЕТ)</a>--}}
+                            <a class="dropdown-item d-flex align-items-center @if(Request::segment(1) == 'template5') active @endif" href="{{ route('template5') }}">ДОГОВОР БЮДЖЕТ</a>
                         </li>
 
                     </ul>
@@ -77,17 +83,48 @@
                     $user->load('section');
                 @endphp
 
-                @if(Request::segment(1) == 'template1' || Request::segment(1) == 'template2' || Request::segment(1) == 'template3' ||
-                Request::segment(1) == 'template4' || Request::segment(1) == 'template5')
+                @if($user->section->rule != 'JURIST')
+                    @if(Request::segment(1) == 'template1' || Request::segment(1) == 'template2' || Request::segment(1) == 'template3' ||
+                    Request::segment(1) == 'template4' || Request::segment(1) == 'template5' || Request::segment(3) == 'edit')
 
-                    <li class="c-header-nav-item mx-md-5 mx-2">
-                        <a class="c-header-nav-link active" href="#">
-                            <svg class="c-icon">
-                                <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-pencil')  }}"></use>
-                            </svg>
-                            <div class="c-avatar">edit</div>
-                        </a>
-                    </li>
+                        <li class="nav-item d-flex align-content-center" style="height: 39px;">
+                            <div class="row js_div_form d-none" style="margin-top: 5px;">
+                                @if(Request::segment(1) == 'template3')
+                                    <div class="col-md-5">
+                                        <select name="number" class="form-control form-control-sm js_tin_number" style="border: 1px solid #7367f0;">
+                                            <option value="1">Принимающая сторона</option>
+                                            <option value="2">Дебитор</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-7 pl-0">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="tin" class="form-control js_tin_input" placeholder="TIN" aria-describedby="button-addon2" style="border: 1px solid #7367f0;">
+                                            <div class="input-group-append js_tin_icon" id="button-addon2">
+                                                <button class="btn btn-outline-primary waves-effect js_tin_btn" type="button">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="col-md-12 pl-0">
+                                        <div class="input-group input-group-sm">
+                                            <input type="hidden" name="number" value="1" class="js_tin_number"/>
+                                            <input type="text" name="tin" class="form-control js_tin_input" placeholder="TIN" aria-describedby="button-addon2" style="border: 1px solid #7367f0;">
+                                            <div class="input-group-append js_tin_icon" id="button-addon2">
+                                                <button class="btn btn-outline-primary waves-effect js_tin_btn" type="button">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </li>
+
+                        <li class="c-header-nav-item mx-md-5 mx-2 nav-item mr-2">
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm js_text_edit_btn"><i class="fas fa-pen"></i> edit</a>
+                            <a href="javascript:void(0);" class="btn btn-success btn-sm js_text_save_btn d-none"><i class="fas fa-check"></i> save</a>
+                            <a href="javascript:void(0);" class="btn btn-secondary btn-sm js_text_cancel_btn d-none"><i class="fas fa-times"></i> cancel</a>
+                        </li>
+
+                    @endif
 
                 @endif
 
@@ -96,7 +133,7 @@
                         <svg class="c-icon">
                             <use xlink:href="{{ asset('/icons/sprites/free.svg#cil-user') }}"></use>
                         </svg>
-                        <div class="c-avatar">User</div>
+                        <div class="ml-2">{{ $user->full_name }}</div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0 pb-0">
 
@@ -155,6 +192,7 @@
 <script src="{{ asset('/js/coreui-utils.js') }}"></script>
 <script src="{{ asset('/js/datatable.js') }}"></script>
 
+<script src="{{ asset('select2/js/select2.js') }}"></script>
 {{-- number format --}}
 <script src="{{ asset('/js/numeral.js') }}"></script>
 <script src="{{ asset('/js/form-validation.js') }}"></script>

@@ -16,6 +16,13 @@ $(document).ready(function() {
 
         let list3_tr4_radio_div = $('.js_list3_tr4_radio_div')
         list3_tr4_radio_div.removeClass('d-none')
+
+        //
+        let list3_tr4_select2_text = $('.js_list3_tr4_select2_text')
+        list3_tr4_select2_text.addClass('d-none')
+
+        let list3_tr4_select2_div = $('.js_list3_tr4_select2_div')
+        list3_tr4_select2_div.removeClass('d-none')
     });
 
     // save btn

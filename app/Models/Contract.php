@@ -33,7 +33,7 @@ class Contract extends Model
 
     public function jurist()
     {
-        return $this->hasOne(User::class, 'id', 'jurist_id');
+        return $this->hasOne(User::class, 'id', 'jurist_id', 'left');
     }
 
 
